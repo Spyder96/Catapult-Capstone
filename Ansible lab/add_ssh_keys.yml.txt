@@ -1,0 +1,24 @@
+---
+- name : Add SSH key
+  hosts: all
+  become: yes
+  vars:
+    public_key_file: ./jenkins_to_servers.pub
+  tasks:
+    - name: Ensure ssh directory existence
+      file:
+        path: "~/.ssh"
+        state: directory
+        mode: "0700"
+
+    - name:  Add SSH key to authorized_keys
+      authorized_key:
+        user : "{{ ansible_user }}"
+        key  : "{{ lookup('file', public_key_file) }}"
+      notify: Reload SSH
+
+  handlers:
+    - name: Reload SSH
+      service:
+        name: sshd
+        state: restarted
