@@ -1,1 +1,1 @@
-# AWS-CICD-pipeline
+# DevOps-CICD-pipeline
